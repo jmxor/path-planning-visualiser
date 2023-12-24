@@ -10,7 +10,7 @@ export default function Home() {
   const draw = (ctx: CanvasRenderingContext2D, frameCount: number) => {
     ctx.fillStyle = '#000000'
     ctx.beginPath()
-    tree.nodes.forEach((node, key) => {
+    tree.nodes.forEach(node => {
       ctx.moveTo(node.theta0, node.theta1)
       if (node.parent){
         ctx.lineTo(node.parent?.theta0, node.parent?.theta1)

@@ -9,18 +9,33 @@ export class TreeNode {
 
     this.parent = parent
   }
+
+  // Returns whether a given node has the same position
+  equals(node: TreeNode) {
+    return this.theta0 == node.theta0 && this.theta1 == node.theta0
+  }
 }
 
 
 export class Tree {
-  nodes: Map<[number, number], TreeNode>;
+  nodes: TreeNode[]
 
   constructor() {
-    this.nodes = new Map();
+    this.nodes = [];
   }
 
+  // Add a new node to the tree
   add_node(node: TreeNode) {
-    const coords: [number, number] = [node.theta0, node.theta1]
-    this.nodes.set(coords, node)
+    this.nodes.push(node)
+  }
+
+  // Add several new nodes to the tree
+  add_nodes(...nodes: TreeNode[]) {
+    nodes.forEach(node => this.add_node(node))
+  }
+
+  // Returns whether the tree contains a node at the same point
+  has_node(node: TreeNode) {
+    return this.nodes.some(node.equals)
   }
 }
