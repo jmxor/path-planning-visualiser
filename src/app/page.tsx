@@ -1,7 +1,7 @@
 "use client"
 
 import Canvas from "@/components/Canvas";
-import {Tree, TreeNode} from "@/utils/Tree";
+import Tree from "@/utils/Tree";
 
 export default function Home() {
   const tree = new Tree();
