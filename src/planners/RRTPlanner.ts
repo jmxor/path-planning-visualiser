@@ -2,17 +2,17 @@ import Tree from "@/utils/Tree";
 import TreeNode from "@/utils/TreeNode";
 
 export default class RRTPlanner {
-  start: TreeNode
-  goal: TreeNode
+  qStart: TreeNode
+  qGoal: TreeNode
 
   tree: Tree
 
   step_size: number
   expansion_size: number
 
-  constructor(q_start: TreeNode, q_goal: TreeNode) {
-    this.start = q_start
-    this.goal = q_goal
+  constructor() {
+    this.qStart = new TreeNode(25, 25)
+    this.qGoal = new TreeNode(275, 125)
 
     this.step_size = 0.05
     this.expansion_size = 10
@@ -20,8 +20,17 @@ export default class RRTPlanner {
     this.tree = new Tree()
   }
 
+  setStart(qStart: TreeNode) {
+    this.qStart = qStart
+  }
+
+  setGoal(qGoal: TreeNode) {
+    this.qGoal = qGoal
+  }
+
   solve(timeout_ms: number = 5000) {
-    this.tree.add_node(this.start)
+    this.tree = new Tree()
+    this.tree.add_node(this.qStart)
 
     const timeout = Date.now() + timeout_ms
     while (Date.now() < timeout) {
@@ -38,13 +47,17 @@ export default class RRTPlanner {
       this.tree.add_node(q_new)
 
       // Check if goal has been reached
-      if (q_new.distance(this.goal) <= this.expansion_size) {
-        this.goal.parent = q_new
-        this.tree.add_node(this.goal)
+      if (q_new.distance(this.qGoal) <= this.expansion_size) {
+        this.qGoal.parent = q_new
+        this.tree.add_node(this.qGoal)
         return true
       }
     }
 
     return false
+  }
+
+  nodes() {
+    return this.tree.nodes
   }
 }

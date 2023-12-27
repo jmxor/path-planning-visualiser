@@ -22,7 +22,7 @@ export default class Tree {
     return this.nodes.includes(node)
   }
 
-    // Return the closest node in the tree
+  // Return the closest node in the tree
   nearest(node: TreeNode) {
     let nearest_node = this.nodes[0]
     let dist = Infinity

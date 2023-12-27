@@ -3,12 +3,20 @@
 import Canvas from "@/components/Canvas";
 import TreeNode from "@/utils/TreeNode";
 import RRTPlanner from "@/planners/RRTPlanner";
+import {useEffect, useState} from "react";
 
 export default function Home() {
-  const q_start = new TreeNode(25, 25)
-  const q_goal = new TreeNode(275, 125)
-  const planner = new RRTPlanner(q_start, q_goal);
-  planner.solve()
+  const [qStart, setQStart] = useState(new TreeNode(25, 25))
+  const [qGoal, setQGoal] = useState(new TreeNode(275, 125))
+  const [planner, setPlanner] = useState(new RRTPlanner())
+  const [nodes, setNodes] = useState<Array<TreeNode>>([])
+
+  const plan = () => {
+    planner.setStart(qStart)
+    planner.setGoal(qGoal)
+    planner.solve()
+    setNodes(planner.nodes())
+  }
 
   // Render Tree
   const draw = (ctx: CanvasRenderingContext2D, frameCount: number) => {
@@ -16,7 +24,7 @@ export default function Home() {
 
     ctx.fillStyle = '#000000'
     ctx.beginPath()
-    planner.tree.nodes.forEach(node => {
+    nodes.forEach(node => {
       ctx.moveTo(node.theta0, node.theta1)
       if (node.parent) {
         ctx.lineTo(node.parent?.theta0, node.parent?.theta1)
@@ -27,13 +35,13 @@ export default function Home() {
     // Draw start node
     ctx.beginPath()
     ctx.fillStyle = '#00AA00'
-    ctx.arc(q_start.theta0, q_start.theta1, 3, 0, 2 * Math.PI)
+    ctx.arc(qStart.theta0, qStart.theta1, 3, 0, 2 * Math.PI)
     ctx.fill()
 
     // Draw goal node
     ctx.beginPath()
     ctx.fillStyle = '#AA0000'
-    ctx.arc(q_goal.theta0, q_goal.theta1, 3, 0, 2 * Math.PI)
+    ctx.arc(qGoal.theta0, qGoal.theta1, 3, 0, 2 * Math.PI)
     ctx.fill()
   }
 
@@ -41,6 +49,7 @@ export default function Home() {
     <main>
       <h1>Path Planning Visualiser</h1>
       <Canvas draw={draw}/>
+      <button onClick={plan}>Plan</button>
     </main>
   )
 }
