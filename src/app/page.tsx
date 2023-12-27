@@ -2,21 +2,26 @@
 
 import Canvas from "@/components/Canvas";
 import TreeNode from "@/utils/TreeNode";
-import RRTPlanner from "@/planners/RRTPlanner";
+import RRT from "@/planners/RRT";
 import {useEffect, useState} from "react";
 
 export default function Home() {
   const [qStart, setQStart] = useState(new TreeNode(25, 25))
   const [qGoal, setQGoal] = useState(new TreeNode(275, 125))
-  const [planner, setPlanner] = useState(new RRTPlanner())
+  const [planner, setPlanner] = useState(new RRT())
   const [nodes, setNodes] = useState<Array<TreeNode>>([])
 
   const plan = () => {
+    planner.clear()
     planner.setStart(qStart)
     planner.setGoal(qGoal)
     planner.solve()
     setNodes(planner.nodes())
   }
+
+  useEffect(() => {
+    plan()
+  }, []);
 
   // Render Tree
   const draw = (ctx: CanvasRenderingContext2D, frameCount: number) => {
