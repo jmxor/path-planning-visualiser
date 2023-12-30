@@ -34,7 +34,7 @@ export default class RRT implements IPlanner{
   }
 
   solve(timeoutMS: number = 5000) {
-    this.tree.add_node(this.qStart)
+    this.tree.addNode(this.qStart)
 
     const timeout = Date.now() + timeoutMS
     while (Date.now() < timeout) {
@@ -48,12 +48,12 @@ export default class RRT implements IPlanner{
       // TODO: add collision checking
       // Add new node to tree
       qNew.parent = qNear
-      this.tree.add_node(qNew)
+      this.tree.addNode(qNew)
 
       // Check if goal has been reached
       if (qNew.distance(this.qGoal) <= this.expansionSize) {
         this.qGoal.parent = qNew
-        this.tree.add_node(this.qGoal)
+        this.tree.addNode(this.qGoal)
         return true
       }
     }

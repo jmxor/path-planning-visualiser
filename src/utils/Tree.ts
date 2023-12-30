@@ -8,18 +8,13 @@ export default class Tree {
   }
 
   // Add a new node to the tree
-  add_node(node: TreeNode) {
+  addNode(node: TreeNode) {
     this.nodes.push(node)
   }
 
   // Add several new nodes to the tree
-  add_nodes(...nodes: TreeNode[]) {
-    nodes.forEach(node => this.add_node(node))
-  }
-
-  // Returns whether the tree contains a node
-  has_node(node: TreeNode) {
-    return this.nodes.includes(node)
+  addNodes(...nodes: TreeNode[]) {
+    nodes.forEach(node => this.addNode(node))
   }
 
   // Return the closest node in the tree
@@ -38,15 +33,30 @@ export default class Tree {
     return nearest_node
   }
 
-
-  step(node: TreeNode, goal: TreeNode, expansion_size: number) {
-    if (node.distance(goal) <= expansion_size) {
+  // Returns a new node
+  step(node: TreeNode, goal: TreeNode, expansionSize: number) {
+    if (node.distance(goal) <= expansionSize) {
       return new TreeNode(goal.theta0, goal.theta1)
     }
 
     let theta = Math.atan2(goal.theta1 - node.theta1, goal.theta0 - node.theta0)
-    let theta0 = node.theta0 + expansion_size * Math.cos(theta)
-    let theta1 = node.theta1 + expansion_size * Math.sin(theta)
+    let theta0 = node.theta0 + expansionSize * Math.cos(theta)
+    let theta1 = node.theta1 + expansionSize * Math.sin(theta)
     return new TreeNode(theta0, theta1)
+  }
+
+  // Returns the neighbours within a radius of a node
+  neighbours(node: TreeNode, expansionSize: number) {
+    return this.nodes.filter((n) => node.distance(n) <= expansionSize)
+  }
+
+  // Returns the path from leaf node to root
+  branch(node: TreeNode) {
+    const branch = [node];
+    while (node.parent != undefined) {
+      node = node.parent
+      branch.push(node)
+    }
+    return branch
   }
 }
